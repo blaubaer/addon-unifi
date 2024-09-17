@@ -31,7 +31,7 @@ jobs:
         run: |
           set -ex
           push="false"
-          ref=$(echo "${{ github.ref_name }}" | sed -E "s/^v([0-9]+(\.[0-9]+)*)(-.+)?$/\1/")
+          ref=$(echo "${{ github.ref_name }}" | sed -E "s/^v([0-9]+(\.[0-9]+)*)(-.+)?$/\1/") | sed -E "s/^([0-9]+)\/merge$/pr-\1/"
           prefix="${{ env.REGISTRY }}/${{ github.repository }}/${{ matrix.addon }}"
           imageTags="${prefix}:${ref}"
 
@@ -40,7 +40,10 @@ jobs:
             push="true"
           fi
 
-          if [[ "${{ github.ref_name }}" =~ "^v([0-9]+(\.[0-9]+)*)(-.+)?$" ]]; then
+          if [[ "${{ github.ref_name }}" =~ ^v([0-9]+(\.[0-9]+)*)(-.+)?$ ]]; then
+            push="true"
+          fi
+          if [[ "${{ github.ref_name }}" =~ ^([0-9]+)\/merge$ ]]; then
             push="true"
           fi
 
