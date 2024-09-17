@@ -7,13 +7,9 @@ url: https://github.com/blaubaer/ha-addon-unifi
 image: ghcr.io/blaubaer/ha-addon-unifi/unifi
 webui: https://[HOST]:[PORT:8443]
 startup: services
-ingress: true
-ingress_port: 8843
-ingress_stream: true
 arch:
   - amd64
   - aarch64
-  - armv7
 init: false
 backup: cold
 backup_exclude:
@@ -23,6 +19,7 @@ backup_exclude:
   - "*/unifi/data/system.properties.bk"
 map:
   - backup:rw
+  - ssl
 ports:
   161/udp: null
   1900/udp: null
