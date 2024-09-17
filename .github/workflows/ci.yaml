@@ -17,11 +17,10 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
-    name: Build ${{ matrix.platform }} ${{ matrix.addon }} add-on
+    name: Build ${{ matrix.addon }} add-on
     strategy:
       matrix:
         addon: [ "unifi" ]
-        platform: [ "linux/amd64", "linux/arm64" ]
     permissions:
       contents: read
       packages: write
@@ -32,7 +31,7 @@ jobs:
         run: |
           set -ex
           push="false"
-          ref=$(echo "${{ github.ref_name }}" | sed -E "s/^v([0-9]+(\.[0-9]+)*)(-.+)?$/\1/")
+          ref=$(echo "${{ github.ref_name }}" | sed -E "s/^v([0-9]+(\.[0-9]+)*)(-.+)?$/\1/" | sed -E "s/^([0-9]+)\/merge$/pr-\1/")
           prefix="${{ env.REGISTRY }}/${{ github.repository }}/${{ matrix.addon }}"
           imageTags="${prefix}:${ref}"
 
@@ -41,7 +40,10 @@ jobs:
             push="true"
           fi
 
-          if [[ "${{ github.ref_name }}" =~ "^v([0-9]+(\.[0-9]+)*)(-.+)?$" ]]; then
+          if [[ "${{ github.ref_name }}" =~ ^v([0-9]+(\.[0-9]+)*)(-.+)?$ ]]; then
+            push="true"
+          fi
+          if [[ "${{ github.ref_name }}" =~ ^([0-9]+)\/merge$ ]]; then
             push="true"
           fi
 
@@ -75,7 +77,7 @@ jobs:
         uses: docker/build-push-action@v6
         with:
           context: "./${{ matrix.addon }}"
-          platforms: ${{ matrix.platform }}
+          platforms: linux/amd64,linux/arm64
           labels: ${{ steps.meta.outputs.labels }}
           push: ${{ env.REGISTRY_PUSH }}
           tags: ${{ env.REGISTRY_IMAGE_TAGS }}
