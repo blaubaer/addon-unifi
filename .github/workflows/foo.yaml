@@ -1,5 +1,17 @@
 on:
-  pull_request: {}
+  pull_request:
+    types:
+      - opened
+      - assigned
+      - closed
+      - edited
+      - labeled
+      - locked
+      - reopened
+      - unlabeled
+      - unlocked
+      - unassigned
+      - converted_to_draft
 
 jobs:
   test:
