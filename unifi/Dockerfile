@@ -9,7 +9,7 @@ RUN \
     && apt-get upgrade -y \
     && apt-get install -y --no-install-recommends binutils libcap2 logrotate mongodb-server openjdk-17-jre-headless \
     \
-    && curl -sSLf "https://dl.ui.com/unifi/9.0.108/unifi_sysvinit_all.deb" > /tmp/unifi.deb \
+    && curl -sSLf "https://dl.ui.com/unifi/9.0.114/unifi_sysvinit_all.deb" > /tmp/unifi.deb \
     \
     && dpkg --install /tmp/unifi.deb \
     && apt-get clean \
